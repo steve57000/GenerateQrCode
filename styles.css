@@ -1,0 +1,92 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 20px; /* Ajoute un peu d'espace intérieur */
+}
+
+#formContainer {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  text-align: center;
+  width: 500px;
+  display: flex;
+  flex-direction: column; /* Affiche les éléments en colonne */
+  align-items: center; /* Centre les éléments horizontalement */
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#formContainer > div {
+  margin-bottom: 20px;
+}
+
+#error-message {
+  color: red;
+  font-size: 14px;
+  display: block; /* Assurez-vous que le message est affiché en tant que bloc */
+  margin-top: 5px; /* Ajoutez un espace en haut du message */
+}
+
+
+#validInput {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column; /* Affiche les éléments en colonne */
+  align-items: center; /* Centre les éléments horizontalement */
+}
+
+#qrcode-container {
+  margin-bottom: 20px;
+}
+
+#containerDownload {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+#containerDownload > div {
+  margin-right: 10px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+#downloadPng, #downloadSvg{
+  margin: 10px;
+}
+
+
+
+
+
+
+
