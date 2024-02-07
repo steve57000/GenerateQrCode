@@ -1,37 +1,54 @@
 // Fonction pour générer le QR code en fonction des valeurs saisies par l'utilisateur
 function generateQRCode() {
-    const url = document.getElementById('url').value;
-    let size = document.getElementById('size').value;
-    const foregroundColor = document.getElementById('foregroundColor').value;
-    const backgroundColor = document.getElementById('backgroundColor').value;
+  const url = document.getElementById('url').value;
+  const foregroundColor = document.getElementById('foregroundColor').value;
+  const backgroundColor = document.getElementById('backgroundColor').value;
 
-    // Limiter la taille maximale à 500
-    size = Math.min(size, 500);
+  // Taille fixe du QR code
+  const size = 300;
 
-    // Mettre à jour la valeur de l'élément input si elle dépasse la limite
-    document.getElementById('size').value = size;
+  // Résolution du QR code
+  const resolution = 1440; // Augmentez la résolution selon vos besoins
 
-    // Créer un élément canvas pour le QR code
-    const canvas = document.createElement('canvas');
-    const qrCodeContainer = document.getElementById('qrcode-container');
-    qrCodeContainer.innerHTML = ''; // Effacer le contenu précédent
+  // Créer un élément canvas pour le QR code
+  const canvas = document.createElement('canvas');
+  canvas.width = resolution;
+  canvas.height = resolution;
+  const qrCodeContainer = document.getElementById('qrcode-container');
+  qrCodeContainer.innerHTML = ''; // Effacer le contenu précédent
 
-    // Configurer QRious pour générer le QR code avec les couleurs spécifiées
-    new QRious({
-        element: canvas,
-        value: url,
-        size: size,
-        foreground: foregroundColor, // Couleur sombre
-        background: backgroundColor // Couleur claire
-    });
+  // Configurer QRious pour générer le QR code avec les couleurs spécifiées
+  new QRious({
+    element: canvas,
+    value: url,
+    size: size,
+    foreground: foregroundColor, // Couleur sombre
+    background: backgroundColor // Couleur claire
+  });
 
-    // Ajouter le canvas au conteneur
-    qrCodeContainer.appendChild(canvas);
+  // Créer un canvas temporaire pour redimensionner le QR code avec une meilleure qualité
+  const tempCanvas = document.createElement('canvas');
+  tempCanvas.width = size;
+  tempCanvas.height = size;
+  const tempContext = tempCanvas.getContext('2d');
+  tempContext.drawImage(canvas, 0, 0, size, size);
 
-    // Activer les boutons de téléchargement du PNG et du SVG
-    document.getElementById('downloadPng').style.display = 'inline-block';
-    document.getElementById('downloadSvg').style.display = 'inline-block';
+  // Redimensionner le canvas avec interpolation bilinéaire
+  const resizedCanvas = document.createElement('canvas');
+  resizedCanvas.width = size;
+  resizedCanvas.height = size;
+  const resizedContext = resizedCanvas.getContext('2d');
+  resizedContext.drawImage(tempCanvas, 0, 0, size, size, 0, 0, size, size);
+
+  // Ajouter le canvas redimensionné au conteneur
+  qrCodeContainer.appendChild(resizedCanvas);
+
+  // Activer les boutons de téléchargement du PNG et du SVG
+  document.getElementById('downloadPng').style.display = 'inline-block';
+  document.getElementById('downloadSvg').style.display = 'inline-block';
 }
+
+
 
 // Gérer le clic sur le bouton "Valider"
 document.getElementById('generate').addEventListener('click', function() {
@@ -41,63 +58,95 @@ document.getElementById('generate').addEventListener('click', function() {
 
 // Fonction pour télécharger le QR code au format PNG
 function downloadPng() {
-    const canvas = document.querySelector('canvas'); // Sélectionnez le canvas contenant le QR code
-    const url = canvas.toDataURL('image/png'); // Convertir le canvas en URL de données au format PNG
-    const link = document.createElement('a'); // Créer un élément <a> pour le téléchargement
-    link.href = url; // Définir l'URL de données comme lien de téléchargement
+  const imageSizePng = document.getElementById('imageSize').value;
+
+  const canvas = document.querySelector('canvas'); // Sélectionnez le canvas contenant le QR code
+
+  // Créer un nouvel élément canvas pour redimensionner l'image
+  const resizedCanvas = document.createElement('canvas');
+  resizedCanvas.width = imageSizePng;
+  resizedCanvas.height = imageSizePng;
+  const resizedContext = resizedCanvas.getContext('2d');
+
+  // Dessinez l'image redimensionnée sur le nouveau canvas
+  const image = new Image();
+  image.src = canvas.toDataURL('image/png');
+
+  image.onload = function() {
+    resizedContext.drawImage(image, 0, 0, imageSizePng, imageSizePng);
+
+    // Convertir le canvas redimensionné en URL de données au format PNG
+    const resizedImageData = resizedCanvas.toDataURL('image/png');
+
+    // Créer un lien temporaire pour le téléchargement
+    const link = document.createElement('a');
+    link.href = resizedImageData;
     link.download = 'qr_code.png'; // Nom du fichier à télécharger
-    document.body.appendChild(link); // Ajouter le lien à la page
-    link.click(); // Cliquez sur le lien pour démarrer le téléchargement
-    document.body.removeChild(link); // Supprimer le lien après le téléchargement
+
+    // Ajouter le lien à la page et déclencher le téléchargement
+    document.body.appendChild(link);
+    link.click();
+
+    // Nettoyer
+    document.body.removeChild(link);
+  };
 }
 
 // Fonction pour télécharger le QR code au format SVG
 function downloadSvg() {
-    const canvas = document.querySelector('canvas'); // Sélectionnez le canvas contenant le QR code
+  const imageSizeSvg = document.getElementById('imageSize').value;
 
-    // Créer un élément <a> pour le téléchargement
-    const link = document.createElement('a');
+  const canvas = document.querySelector('canvas'); // Sélectionnez le canvas contenant le QR code
 
-    // Convertir le contenu du canvas en URL de données au format PNG
-    const imageData = canvas.toDataURL('image/png');
+  // Créer un élément <svg> pour le contenu SVG
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', imageSizeSvg);
+  svg.setAttribute('height', imageSizeSvg);
 
-    // Créer le contenu du fichier SVG avec l'image du canvas
-    const svgContent = '<svg xmlns="http://www.w3.org/2000/svg" width="' + canvas.width + '" height="' + canvas.height + '" xmlns:xlink="http://www.w3.org/1999/xlink">' +
-        '<image xlink:href="' + imageData + '" width="' + canvas.width + '" height="' + canvas.height + '" />' +
-        '</svg>';
+  // Créer un élément <image> pour le QR code
+  const qrImage = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+  qrImage.setAttribute('width', imageSizeSvg);
+  qrImage.setAttribute('height', imageSizeSvg);
 
-    const blob = new Blob([svgContent], { type: 'image/svg+xml' }); // Créer un Blob avec le contenu SVG
-    const url = URL.createObjectURL(blob); // Créer une URL pour le Blob
+  // Créer un canvas temporaire pour redimensionner l'image avec une meilleure qualité
+  const tempCanvas = document.createElement('canvas');
+  tempCanvas.width = imageSizeSvg;
+  tempCanvas.height = imageSizeSvg;
+  const tempContext = tempCanvas.getContext('2d');
 
-    link.href = url; // Définir l'URL du Blob comme lien de téléchargement
-    link.download = 'qr_code.svg'; // Nom du fichier à télécharger
+  // Dessiner l'image redimensionnée sur le canvas temporaire
+  tempContext.drawImage(canvas, 0, 0, imageSizeSvg, imageSizeSvg);
 
-    document.body.appendChild(link); // Ajouter le lien à la page
-    link.click(); // Cliquez sur le lien pour démarrer le téléchargement
+  // Convertir le canvas temporaire en URL de données au format PNG
+  const resizedImageData = tempCanvas.toDataURL('image/png');
 
-    // Libérer l'URL après le téléchargement
-    URL.revokeObjectURL(url);
-    document.body.removeChild(link); // Supprimer le lien après le téléchargement
+  // Définir l'URL de l'image redimensionnée comme source de l'élément <image>
+  qrImage.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', resizedImageData);
+
+  // Ajouter l'élément <image> à l'élément <svg>
+  svg.appendChild(qrImage);
+
+  // Créer un lien temporaire pour le téléchargement
+  const link = document.createElement('a');
+  link.href = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(svg));
+  link.download = 'qr_code.svg'; // Nom du fichier à télécharger
+
+  // Ajouter le lien à la page et déclencher le téléchargement
+  document.body.appendChild(link);
+  link.click();
+
+  // Nettoyer
+  document.body.removeChild(link);
 }
+
+
+
 
 // Ajouter des écouteurs d'événements pour les boutons de téléchargement
 document.getElementById('downloadPng').addEventListener('click', downloadPng);
 document.getElementById('downloadSvg').addEventListener('click', downloadSvg);
 
-// Sélection de l'élément <input type="number">
-const sizeInput = document.getElementById('size');
 
-// Ajout d'un gestionnaire d'événements pour l'événement "input"
-sizeInput.addEventListener('input', function() {
-    // Récupération de la valeur saisie
-    let size = parseInt(sizeInput.value);
-
-    // Limiter la taille maximale à 500
-    size = Math.min(size, 500);
-
-    // Mettre à jour la valeur de l'élément input si elle dépasse la limite
-    sizeInput.value = size;
-});
 
 
 
