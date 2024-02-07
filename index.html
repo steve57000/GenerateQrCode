@@ -18,12 +18,22 @@
   </div>
   <div>
     <label for="backgroundColor">Choisir une couleur plus claire:</label>
-    <input type="color" id="backgroundColor" value="#000000">
+    <input type="color" id="backgroundColor" value="#FFFFFF">
   </div>
   <div>
     <label for="imageSize">Taille de l'image à télécharger:</label>
     <input type="number" id="imageSize" value="200" min="50" max="2000">
   </div>
+  <div>
+    <label for="errorCorrectionLevel">Niveau de correction d'erreur:</label>
+    <select id="errorCorrectionLevel">
+      <option value="L">L (7%)</option>
+      <option value="M" selected>M (15%)</option>
+      <option value="Q">Q (25%)</option>
+      <option value="H">H (30%)</option>
+    </select>
+  </div>
+
   <div id="validInput">
     <button id="generate">Valider</button>
   </div>

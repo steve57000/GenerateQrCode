@@ -1,3 +1,5 @@
+
+// -------------------------------FONCTIONNEL--------------------------------------------- //
 // Fonction pour générer le QR code en fonction des valeurs saisies par l'utilisateur
 function generateQRCode() {
   const url = document.getElementById('url').value;
@@ -47,8 +49,6 @@ function generateQRCode() {
   document.getElementById('downloadPng').style.display = 'inline-block';
   document.getElementById('downloadSvg').style.display = 'inline-block';
 }
-
-
 
 // Gérer le clic sur le bouton "Valider"
 document.getElementById('generate').addEventListener('click', function() {
@@ -138,9 +138,6 @@ function downloadSvg() {
   // Nettoyer
   document.body.removeChild(link);
 }
-
-
-
 
 // Ajouter des écouteurs d'événements pour les boutons de téléchargement
 document.getElementById('downloadPng').addEventListener('click', downloadPng);

@@ -7,8 +7,8 @@
   },
   "author": "steve bell",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "qrcode-svg": "^1.1.0"
-  }
+  },
+  "description": ""
 }
