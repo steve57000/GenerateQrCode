@@ -26,7 +26,7 @@ function generateQRCode() {
   const url = document.getElementById('url').value;
   const foregroundColor = document.getElementById('foregroundColor').value;
   const backgroundColor = document.getElementById('backgroundColor').value;
-  const imageSize = 300; // Taille fixe du QR code affiché dans le conteneur
+  const imageSize = 250; // Taille fixe du QR code affiché dans le conteneur
   const errorCorrectionLevel = document.getElementById('errorCorrectionLevel').value;
   padding = 15; // Padding autour du QR code
   if (errorCorrectionLevel === 'H' || errorCorrectionLevel === 'Q') {
