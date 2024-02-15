@@ -26,12 +26,12 @@ function generateQRCode() {
   const url = document.getElementById('url').value;
   const foregroundColor = document.getElementById('foregroundColor').value;
   const backgroundColor = document.getElementById('backgroundColor').value;
-  const imageSize = 250; // Taille fixe du QR code affiché dans le conteneur
+  const imageSize = 200; // Taille fixe du QR code affiché dans le conteneur
   const errorCorrectionLevel = document.getElementById('errorCorrectionLevel').value;
   padding = 15; // Padding autour du QR code
-  if (errorCorrectionLevel === 'H' || errorCorrectionLevel === 'Q') {
-    padding = 10; // Réduire le padding pour les niveaux H et Q
-  }
+  // if (errorCorrectionLevel === 'H' || errorCorrectionLevel === 'Q') {
+  //   padding = 15; // Réduire le padding pour les niveaux H et Q
+  // }
   borderRadius = 20; // Rayon des coins arrondis pour le carré extérieur
 
   // Taille du carré extérieur
