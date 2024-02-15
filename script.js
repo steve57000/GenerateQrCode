@@ -30,7 +30,7 @@ function generateQRCode() {
   const errorCorrectionLevel = document.getElementById('errorCorrectionLevel').value;
   padding = 15; // Padding autour du QR code
   if (errorCorrectionLevel === 'H' || errorCorrectionLevel === 'Q') {
-    padding = 5; // Réduire le padding pour les niveaux H et Q
+    padding = 10; // Réduire le padding pour les niveaux H et Q
   }
   borderRadius = 20; // Rayon des coins arrondis pour le carré extérieur
 
