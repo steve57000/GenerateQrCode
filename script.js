@@ -28,7 +28,7 @@ function generateQRCode() {
   const backgroundColor = document.getElementById('backgroundColor').value;
   const imageSize = 300; // Taille fixe du QR code affiché dans le conteneur
   const errorCorrectionLevel = document.getElementById('errorCorrectionLevel').value;
-  padding = 10; // Padding autour du QR code
+  padding = 15; // Padding autour du QR code
   if (errorCorrectionLevel === 'H' || errorCorrectionLevel === 'Q') {
     padding = 5; // Réduire le padding pour les niveaux H et Q
   }
