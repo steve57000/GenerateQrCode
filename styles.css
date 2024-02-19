@@ -1,20 +1,18 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f0f0;
+  background-color: #6d6d6d;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   margin: 0;
   padding: 20px; /* Ajoute un peu d'espace intérieur */
 }
 
 #formContainer {
-  background-color: #fff;
+  background-color: #e1e0e0;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   padding: 40px;
-  text-align: center;
   width: 500px;
   display: flex;
   flex-direction: column; /* Affiche les éléments en colonne */
@@ -25,39 +23,78 @@ h1 {
   color: #333;
   margin-bottom: 20px;
 }
+#formContainer > #containerDownload{
+  margin-bottom: 0;
+}
+
+#formContainer  #errorCorrectionLevel{
+  width: 100%;
+}
 
 #formContainer > div {
   margin-bottom: 20px;
+  width: 100%; /* Définir la largeur de chaque div à 100% */
+  box-sizing: border-box; /* Inclure la bordure et le padding dans la largeur */
 }
 
-#error-message {
-  color: red;
-  font-size: 14px;
-  display: block; /* Assurez-vous que le message est affiché en tant que bloc */
-  margin-top: 5px; /* Ajoutez un espace en haut du message */
+#formContainer > div label {
+  display: block; /* Afficher les labels en bloc */
+  margin-bottom: 5px; /* Ajouter un espace entre les labels et les inputs */
+  text-align: left; /* Aligner le texte à gauche */
 }
 
-
-#validInput {
-  margin-bottom: 20px;
+#formContainer input[type="text"],
+#formContainer input[type="number"],
+#formContainer select {
+  width: calc(100% - 19px); /* Prendre la largeur totale de la div moins la marge */
+  padding: 8px; /* Ajouter un peu de rembourrage */
+  margin-bottom: 10px; /* Ajouter un peu d'espace en bas */
+  border-radius: 5px; /* Ajouter des coins arrondis */
+  border: 1px solid #ccc; /* Ajouter une bordure */
+}
+#containerColor, #containerOpacityQrCode {
   display: flex;
-  flex-direction: column; /* Affiche les éléments en colonne */
-  align-items: center; /* Centre les éléments horizontalement */
+  justify-content: space-between;
+}
+
+@media (max-width:600px){
+  #containerColor, #containerOpacityQrCode{
+    flex-direction: column;
+  }
+}
+
+#containerColor > div
+ {
+  flex-grow: 0.43; /* Les divs occupent la même quantité d'espace */
+}
+
+#containerOpacityQrCode > div {
+  flex-grow: 0.2;
+}
+
+#containerColor input[type="color"] {
+  width: 100%;
+  height: 30px;
+  margin-bottom: 10px; /* Ajouter un peu d'espace en bas */
+  border-radius: 3px; /* Ajouter des coins arrondis */
+  border: 1px solid #ccc; /* Ajouter une bordure */
 }
 
 #qrcode-container {
   margin-bottom: 20px;
+  text-align: center;
 }
-
+#validInput{
+  text-align: center;
+}
 #containerDownload {
-  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
 
-#containerDownload > div {
-  margin-right: 10px;
+#containerDownload > button {
+  margin: 10px;
 }
 
 button {
@@ -79,20 +116,16 @@ button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
-
-#downloadPng, #downloadSvg{
-  margin: 10px;
+#containerOpacityQrCode div > .error-message {
+  width: 200px;
 }
-
 .error-message {
   color: red;
   font-size: 12px;
-  margin-top: 5px;
 }
-
-
-
-
-
-
-
+@media (max-width: 600px){
+  #containerOpacityQrCode div > .error-message {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+}
