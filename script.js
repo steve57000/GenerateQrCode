@@ -4,8 +4,8 @@ let padding;
 let canvas;
 
 // Fonction pour dessiner un rectangle avec des coins arrondis
-function drawRoundedRect(context, size, radius, color) {
-  context.fillStyle = color;
+function drawRoundedRect(context, size, radius, color, alpha) {
+  context.fillStyle = `rgba(${hexToRgb(color)}, ${alpha})`;
   context.beginPath();
   context.moveTo(radius, 0);
   context.arcTo(size, 0, size, size, radius);
@@ -16,10 +16,22 @@ function drawRoundedRect(context, size, radius, color) {
   context.fill();
 }
 
+// Fonction pour convertir une couleur hexadécimale en RGB
+function hexToRgb(hex) {
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+    return r + r + g + g + b + b;
+  });
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+}
+
 // Gérer les changements dans les champs de formulaire
 document.getElementById('url').addEventListener('input', handleInputChange);
 document.getElementById('foregroundColor').addEventListener('input', handleInputChange);
 document.getElementById('backgroundColor').addEventListener('input', handleInputChange);
+document.getElementById('foregroundAlpha').addEventListener('input', handleInputChange);
+document.getElementById('backgroundAlpha').addEventListener('input', handleInputChange);
 document.getElementById('imageSize').addEventListener('input', handleInputChange);
 document.getElementById('errorCorrectionLevel').addEventListener('change', handleInputChange);
 
@@ -35,17 +47,15 @@ document.getElementById('generate').addEventListener('click', function() {
 });
 
 // Fonction pour générer le QR code en fonction des valeurs saisies par l'utilisateur
-// Fonction pour générer le QR code en fonction des valeurs saisies par l'utilisateur
 function generateQRCode() {
   const url = document.getElementById('url').value;
   const foregroundColor = document.getElementById('foregroundColor').value;
   const backgroundColor = document.getElementById('backgroundColor').value;
+  const foregroundAlpha = parseFloat(document.getElementById('foregroundAlpha').value);
+  const backgroundAlpha = parseFloat(document.getElementById('backgroundAlpha').value);
   const imageSize = 200; // Taille fixe du QR code affiché dans le conteneur
   const errorCorrectionLevel = document.getElementById('errorCorrectionLevel').value;
   padding = 15; // Padding autour du QR code
-  // if (errorCorrectionLevel === 'H' || errorCorrectionLevel === 'Q') {
-  //   padding = 15; // Réduire le padding pour les niveaux H et Q
-  // }
   borderRadius = 20; // Rayon des coins arrondis pour le carré extérieur
 
   // Taille du carré extérieur
@@ -60,7 +70,9 @@ function generateQRCode() {
     value: url,
     size: imageSize, // Taille réelle du QR code
     foreground: foregroundColor, // Couleur sombre
+    foregroundAlpha: foregroundAlpha,
     background: backgroundColor, // Couleur claire
+    backgroundAlpha: backgroundAlpha,
     level: errorCorrectionLevel // Niveau de correction d'erreur
   });
 
@@ -69,7 +81,7 @@ function generateQRCode() {
   canvas.height = outerSize;
 
   // Dessiner le carré extérieur avec les coins arrondis
-  drawRoundedRect(context, outerSize, borderRadius, backgroundColor);
+  drawRoundedRect(context, outerSize, borderRadius, backgroundColor, backgroundAlpha);
 
   // Dessiner le QR code à l'intérieur du carré extérieur
   context.drawImage(qr.canvas, padding, padding, imageSize, imageSize);
@@ -79,7 +91,6 @@ function generateQRCode() {
   qrCodeContainer.innerHTML = ''; // Effacer le contenu précédent
   qrCodeContainer.appendChild(canvas);
 }
-
 
 // Fonction pour générer les boutons de téléchargement
 function generateDownloadButtons() {
@@ -114,7 +125,7 @@ function downloadPng() {
   const downloadContext = downloadCanvas.getContext('2d');
 
   // Dessinez le carré extérieur avec les coins arrondis et la couleur de fond spécifiée par l'utilisateur
-  drawRoundedRect(downloadContext, imageSizePng, borderRadius, backgroundColor); // Utiliser la couleur de fond spécifiée
+  drawRoundedRect(downloadContext, imageSizePng, borderRadius, backgroundColor, 1); // Utiliser la couleur de fond spécifiée
 
   // Dessinez le QR code à l'intérieur du carré extérieur avec le padding approprié
   downloadContext.drawImage(canvas, padding, padding, imageSizePng - 2 * padding, imageSizePng - 2 * padding);
@@ -147,7 +158,7 @@ function downloadSvg() {
   const downloadContext = downloadCanvas.getContext('2d');
 
   // Dessinez le carré extérieur avec les coins arrondis et la couleur de fond spécifiée par l'utilisateur
-  drawRoundedRect(downloadContext, imageSizeSvg, borderRadius, backgroundColor); // Utiliser la couleur de fond spécifiée
+  drawRoundedRect(downloadContext, imageSizeSvg, borderRadius, backgroundColor, 1); // Utiliser la couleur de fond spécifiée
 
   // Dessinez le QR code à l'intérieur du carré extérieur avec le padding approprié
   downloadContext.drawImage(canvas, padding, padding, imageSizeSvg - 2 * padding, imageSizeSvg - 2 * padding);
@@ -184,10 +195,65 @@ function downloadSvg() {
   // Nettoyer
   document.body.removeChild(link);
 }
-
-
-// Fonction pour gérer les changements dans les champs de formulaire et générer le QR code
 function handleInputChange() {
+  const imageSizeInput = document.getElementById('imageSize');
+  const imageSize = parseInt(imageSizeInput.value);
+  const imageSizeMin = parseInt(imageSizeInput.min);
+  const imageSizeMax = parseInt(imageSizeInput.max);
+  const imageSizeErrorMessage = document.getElementById('sizeErrorMessage');
+
+  const backgroundAlphaInput = document.getElementById('backgroundAlpha');
+  const backgroundAlpha = parseFloat(backgroundAlphaInput.value);
+  const backgroundAlphaMin = parseFloat(backgroundAlphaInput.min);
+  const backgroundAlphaMax = parseFloat(backgroundAlphaInput.max);
+  const backgroundAlphaErrorMessage = document.getElementById('backgroundAlphaErrorMessage');
+
+  const foregroundAlphaInput = document.getElementById('foregroundAlpha');
+  const foregroundAlpha = parseFloat(foregroundAlphaInput.value);
+  const foregroundAlphaMin = parseFloat(foregroundAlphaInput.min);
+  const foregroundAlphaMax = parseFloat(foregroundAlphaInput.max);
+  const foregroundAlphaErrorMessage = document.getElementById('foregroundAlphaErrorMessage');
+
+  const urlInput = document.getElementById('url');
+  const url = urlInput.value.trim(); // Supprimer les espaces blancs avant et après l'URL
+  const urlErrorMessage = document.getElementById('urlErrorMessage');
+
+  // Vérifier la taille de l'image
+  if (isNaN(imageSize) || imageSize < imageSizeMin || imageSize > imageSizeMax) {
+    imageSizeErrorMessage.textContent = `La taille de l'image doit être comprise entre ${imageSizeMin} et ${imageSizeMax}.`;
+  } else {
+    imageSizeErrorMessage.textContent = ''; // Effacer le message d'erreur
+  }
+
+  // Vérifier l'alpha de l'arrière-plan
+  if (isNaN(backgroundAlpha) || backgroundAlpha < backgroundAlphaMin || backgroundAlpha > backgroundAlphaMax) {
+    backgroundAlphaErrorMessage.textContent = `La transparence de l'arrière-plan doit être comprise entre ${backgroundAlphaMin} et ${backgroundAlphaMax}.`;
+  } else {
+    backgroundAlphaErrorMessage.textContent = ''; // Effacer le message d'erreur
+  }
+
+  // Vérifier l'alpha du premier plan
+  if (isNaN(foregroundAlpha) || foregroundAlpha < foregroundAlphaMin || foregroundAlpha > foregroundAlphaMax) {
+    foregroundAlphaErrorMessage.textContent = `La transparence du premier plan doit être comprise entre ${foregroundAlphaMin} et ${foregroundAlphaMax}.`;
+  } else {
+    foregroundAlphaErrorMessage.textContent = ''; // Effacer le message d'erreur
+  }
+
+  // Vérifier l'URL
+  const urlPattern = /^(http|https):\/\/[^ "]+$/;
+  if (!url) {
+    urlErrorMessage.textContent = 'Veuillez entrer une URL.';
+  } else if (!urlPattern.test(url)) {
+    urlErrorMessage.textContent = 'Veuillez entrer une URL valide (commençant par http:// ou https://).';
+  } else {
+    urlErrorMessage.textContent = ''; // Effacer le message d'erreur
+  }
+
+  // Activer ou désactiver le bouton "Valider" en fonction de la validité des champs
+  const generateButton = document.getElementById('generate');
+  generateButton.disabled = !!imageSizeErrorMessage.textContent || !!backgroundAlphaErrorMessage.textContent || !!foregroundAlphaErrorMessage.textContent || !!urlErrorMessage.textContent;
+
   clearDownloadButtons();
-  generateQRCode();
+  generateQRCode(); // Générer le QR code
 }
+

@@ -11,18 +11,34 @@
   <div>
     <label for="url">URL:</label>
     <input type="text" id="url" value="https://www.example.com">
+    <div id="urlErrorMessage" class="error-message"></div>
   </div>
-  <div>
-    <label for="foregroundColor">Foreground:</label>
-    <input type="color" id="foregroundColor" value="#000000">
+  <div id="containerColor">
+    <div>
+      <label for="foregroundColor">Premier plan:</label>
+      <input type="color" id="foregroundColor" value="#000000">
+    </div>
+    <div>
+      <label for="backgroundColor">Arrière plan:</label>
+      <input type="color" id="backgroundColor" value="#FFFFFF">
+    </div>
   </div>
-  <div>
-    <label for="backgroundColor">Background:</label>
-    <input type="color" id="backgroundColor" value="#FFFFFF">
+  <div id="containerOpacityQrCode">
+    <div>
+      <label for="backgroundAlpha">Transparence de l'arrière-plan:</label>
+      <input type="number" id="backgroundAlpha" value="1" min="0" max="1" step="0.1">
+      <div id="backgroundAlphaErrorMessage" class="error-message"></div>
+    </div>
+    <div>
+      <label for="foregroundAlpha">Transparence du premier plan:</label>
+      <input type="number" id="foregroundAlpha" value="1" min="0" max="1" step="0.1">
+      <div id="foregroundAlphaErrorMessage" class="error-message"></div>
+    </div>
   </div>
+  
   <div>
     <label for="imageSize">Taille de l'image à télécharger:</label>
-    <input type="number" id="imageSize" value="200" min="50" max="800">
+    <input type="number" id="imageSize" value="200" min="100" max="600" step="50">
     <div id="sizeErrorMessage" class="error-message"></div>
   </div>
   <div>
