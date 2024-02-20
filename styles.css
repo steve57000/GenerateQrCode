@@ -6,6 +6,7 @@ body {
   align-items: center;
   margin: 0;
   padding: 20px; /* Ajoute un peu d'espace intérieur */
+  min-height: 95vh;
 }
 
 #formContainer {
