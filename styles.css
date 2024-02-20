@@ -19,7 +19,7 @@ body {
   flex-direction: column; /* Affiche les éléments en colonne */
   align-items: center; /* Centre les éléments horizontalement */
 }
-@media (max-width: 600px){
+@media (max-width: 780px){
   body {
     padding: 0;
   }
