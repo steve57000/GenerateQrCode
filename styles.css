@@ -19,7 +19,18 @@ body {
   flex-direction: column; /* Affiche les éléments en colonne */
   align-items: center; /* Centre les éléments horizontalement */
 }
-
+@media (max-width: 600px){
+  body {
+    padding: 0;
+  }
+  #formContainer {
+    background-color: #e1e0e0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 10px;
+    width: 100vw;
+  }
+}
 h1 {
   color: #333;
   margin-bottom: 20px;
