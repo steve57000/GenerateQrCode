@@ -75,13 +75,10 @@ h1 {
   }
 }
 
-#containerColor > div
+#containerColor > div,
+#containerOpacityQrCode > div
  {
   flex-grow: 0.43; /* Les divs occupent la même quantité d'espace */
-}
-
-#containerOpacityQrCode > div {
-  flex-grow: 0.2;
 }
 
 #containerColor input[type="color"] {
