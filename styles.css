@@ -69,7 +69,7 @@ h1 {
   justify-content: space-between;
 }
 
-@media (max-width:600px){
+@media (max-width:763px){
   #containerColor, #containerOpacityQrCode{
     flex-direction: column;
   }
@@ -135,7 +135,7 @@ button:disabled {
   color: red;
   font-size: 12px;
 }
-@media (max-width: 600px){
+@media (max-width: 763px){
   #containerOpacityQrCode div > .error-message {
     width: 100%;
     margin-bottom: 15px;
